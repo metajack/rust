@@ -26,8 +26,9 @@ use middle::ty;
 
 use middle::trans::type_::Type;
 
+use util::sha1::Sha1;
+
 use std::c_str::ToCStr;
-use std::hash;
 use std::hashmap::{HashMap, HashSet};
 use std::local_data;
 use std::vec;
@@ -97,7 +98,7 @@ pub struct CrateContext {
      lltypes: HashMap<ty::t, Type>,
      llsizingtypes: HashMap<ty::t, Type>,
      adt_reprs: HashMap<ty::t, @adt::Repr>,
-     symbol_hasher: hash::State,
+     symbol_hasher: Sha1,
      type_hashcodes: HashMap<ty::t, @str>,
      type_short_names: HashMap<ty::t, ~str>,
      all_llvm_symbols: HashSet<@str>,
@@ -124,7 +125,7 @@ impl CrateContext {
                tcx: ty::ctxt,
                emap2: resolve::ExportMap2,
                maps: astencode::Maps,
-               symbol_hasher: hash::State,
+               symbol_hasher: Sha1,
                link_meta: LinkMeta,
                reachable: @mut HashSet<ast::NodeId>)
                -> CrateContext {

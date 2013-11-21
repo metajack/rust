@@ -13,6 +13,7 @@
 // aux-build:crateresolve_calories-2.rs
 // aux-build:crateresolve7x.rs
 
+#[pkgid="crateresolve7x#0.1"];
 extern mod crateresolve7x;
 
 pub fn main() {

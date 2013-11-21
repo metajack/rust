@@ -64,11 +64,10 @@ use middle::trans::value::Value;
 use middle::ty;
 use util::common::indenter;
 use util::ppaux::{Repr, ty_to_str};
-
+use util::sha1::Sha1;
 use middle::trans::type_::Type;
 
 use std::c_str::ToCStr;
-use std::hash;
 use std::hashmap::HashMap;
 use std::libc::c_uint;
 use std::vec;
@@ -3118,7 +3117,7 @@ pub fn trans_crate(sess: session::Session,
         sess.bug("couldn't enable multi-threaded LLVM");
     }
 
-    let mut symbol_hasher = hash::default_state();
+    let mut symbol_hasher = Sha1::new();
     let link_meta = link::build_link_meta(sess, &crate, output,
                                           &mut symbol_hasher);
 

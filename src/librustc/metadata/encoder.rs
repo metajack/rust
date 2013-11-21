@@ -1518,15 +1518,8 @@ fn synthesize_crate_attrs(ecx: &EncodeContext,
             attr::mk_name_value_item_str(@"vers",
                                          ecx.link_meta.vers);
 
-        let pkgid_item = match ecx.link_meta.package_id {
-                Some(pkg_id) =>  attr::mk_name_value_item_str(@"package_id",
-                                                              pkg_id),
-                // uses package_id equal to name;
-                // this should never happen here but package_id is an Option
-                // FIXME (#10370): change package_id in LinkMeta to @str instead of Option<@str>
-                _ => attr::mk_name_value_item_str(@"package_id",
-                                                  ecx.link_meta.name)
-        };
+        let pkgid_item = attr::mk_name_value_item_str(@"package_id",
+                                                      ecx.link_meta.package_id);
 
         let mut meta_items = ~[name_item, vers_item, pkgid_item];
 

@@ -13,6 +13,8 @@
 // aux-build:crateresolve_calories-2.rs
 // error-pattern:mismatched types
 
+#[pkgid="crateresolve6#0.1"];
+
 // These both have the same version but differ in other metadata
 extern mod cr6_1 (name = "crateresolve_calories", vers = "0.1", calories="100");
 extern mod cr6_2 (name = "crateresolve_calories", vers = "0.1", calories="200");

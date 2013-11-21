@@ -43,6 +43,8 @@
 //!
 //!     use std::prelude::*;
 
+#[pkgid="std#0.9-pre"];
+// NOTE: remove after the next snapshot
 #[link(name = "std",
        package_id = "std",
        vers = "0.9-pre",

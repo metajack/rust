@@ -10,6 +10,8 @@
 
 // error-pattern:duplicate meta item `name`
 
+#[pkgid="test"];
+// NOTE: remove after the next snapshot
 #[link(name = "test", name)];
 
 fn main() { }

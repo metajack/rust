@@ -10,6 +10,8 @@
 
 // rustpkg - a package manager and build system for Rust
 
+#[pkgid="rustpkg#0.9-pre"];
+// NOTE: remove after the next snapshot
 #[link(name = "rustpkg",
        package_id = "rustpkg",
        vers = "0.9-pre",
@@ -36,6 +38,7 @@ use extra::workcache;
 use rustc::driver::{driver, session};
 use rustc::metadata::filesearch;
 use rustc::metadata::filesearch::rust_path;
+use rustc::util::sha1;
 use extra::{getopts};
 use syntax::{ast, diagnostic};
 use messages::{error, warn, note};
@@ -67,7 +70,6 @@ mod package_id;
 mod package_source;
 mod path_util;
 mod search;
-mod sha1;
 mod source_control;
 mod target;
 #[cfg(not(windows), test)] // FIXME test failure on windows: #10471
