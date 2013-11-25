@@ -290,23 +290,16 @@ pub fn compile_input(context: &BuildContext,
                                       addl_lib_search_paths.insert(p);
                                   });
 
-    // Inject the link attributes so we get the right package name and version
-    if attr::find_linkage_metas(crate.attrs).is_empty() {
-        let name_to_use = match what {
-            Test  => format!("{}test", pkg_id.short_name).to_managed(),
-            Bench => format!("{}bench", pkg_id.short_name).to_managed(),
-            _     => pkg_id.short_name.to_managed()
-        };
-        debug!("Injecting link name: {}", name_to_use);
-        // FIXME (#9639): This needs to handle non-utf8 paths
-        let link_options =
-            ~[attr::mk_name_value_item_str(@"name", name_to_use),
-              attr::mk_name_value_item_str(@"vers", pkg_id.version.to_str().to_managed())] +
-            ~[attr::mk_name_value_item_str(@"package_id",
-                                           pkg_id.path.as_str().unwrap().to_managed())];
+    // Inject the pkgid attribute so we get the right package name and version
 
-        debug!("link options: {:?}", link_options);
-        crate.attrs = ~[attr::mk_attr(attr::mk_list_item(@"link", link_options))];
+    if !attr::contains_name(crate.attrs, "pkgid") {
+        // FIXME (#9639): This needs to handle non-utf8 paths
+        let pkgid_attr =
+            attr::mk_name_value_item_str(@"pkgid",
+                                         pkg_id.path.as_str().unwrap().to_managed());
+
+        debug!("pkgid attr: {:?}", pkgid_attr);
+        crate.attrs = ~[attr::mk_attr(pkgid_attr)];
     }
 
     debug!("calling compile_crate_from_input, workspace = {},
