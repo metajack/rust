@@ -21,7 +21,7 @@ use middle::trans::context::CrateContext;
 use middle::trans::common::gensym_name;
 use middle::ty;
 use util::ppaux;
-use util::sha1::{Sha1, Digest};
+use util::sha2::{Digest, Sha256};
 
 use std::c_str::ToCStr;
 use std::char;
@@ -470,7 +470,7 @@ pub mod write {
  *  - Symbols with the same name but different types need to get different
  *    linkage-names. We do this by hashing a string-encoding of the type into
  *    a fixed-size (currently 16-byte hex) cryptographic hash function (CHF:
- *    we use SHA1) to "prevent collisions". This is not airtight but 16 hex
+ *    we use SHA256) to "prevent collisions". This is not airtight but 16 hex
  *    digits on uniform probability means you're going to need 2**32 same-name
  *    symbols in the same process before you're even hitting birthday-paradox
  *    collision probability.
@@ -490,13 +490,13 @@ pub mod write {
  *    in this case. CNAME and CVERS are taken from this package id. For
  *    example, github.com/mozilla/CNAME#CVERS.
  *
- *  - Define CMH as SHA1(pkgid).
+ *  - Define CMH as SHA256(pkgid).
  *
  *  - Define CMH8 as the first 8 characters of CMH.
  *
  *  - Compile our crate to lib CNAME-CMH8-CVERS.so
  *
- *  - Define STH(sym) as SHA1(CMH, type_str(sym))
+ *  - Define STH(sym) as SHA256(CMH, type_str(sym))
  *
  *  - Suffix a mangled sym with ::STH@CVERS, so that it is unique in the
  *    name, non-name metadata, and type sense, and versioned in the way
@@ -506,7 +506,7 @@ pub mod write {
 pub fn build_link_meta(sess: Session,
                        c: &ast::Crate,
                        output: &Path,
-                       symbol_hasher: &mut Sha1)
+                       symbol_hasher: &mut Sha256)
                        -> LinkMeta {
     struct ProvidedMetas {
         name: Option<@str>,
@@ -573,7 +573,7 @@ pub fn build_link_meta(sess: Session,
     }
 
     // This calculates CMH as defined above
-    fn crate_meta_hash(symbol_hasher: &mut Sha1, pkg_id: @str) -> @str {
+    fn crate_meta_hash(symbol_hasher: &mut Sha256, pkg_id: @str) -> @str {
         symbol_hasher.reset();
         symbol_hasher.input_str(pkg_id);
         truncated_hash_result(symbol_hasher).to_managed()
@@ -594,14 +594,14 @@ pub fn build_link_meta(sess: Session,
     }
 }
 
-pub fn truncated_hash_result(symbol_hasher: &mut Sha1) -> ~str {
+pub fn truncated_hash_result(symbol_hasher: &mut Sha256) -> ~str {
     symbol_hasher.result_str()
 }
 
 
 // This calculates STH for a symbol, as defined above
 pub fn symbol_hash(tcx: ty::ctxt,
-                   symbol_hasher: &mut Sha1,
+                   symbol_hasher: &mut Sha256,
                    t: ty::t,
                    link_meta: LinkMeta) -> @str {
     // NB: do *not* use abbrevs here as we want the symbol names

@@ -26,7 +26,7 @@ use middle::ty;
 
 use middle::trans::type_::Type;
 
-use util::sha1::Sha1;
+use util::sha2::Sha256;
 
 use std::c_str::ToCStr;
 use std::hashmap::{HashMap, HashSet};
@@ -98,7 +98,7 @@ pub struct CrateContext {
      lltypes: HashMap<ty::t, Type>,
      llsizingtypes: HashMap<ty::t, Type>,
      adt_reprs: HashMap<ty::t, @adt::Repr>,
-     symbol_hasher: Sha1,
+     symbol_hasher: Sha256,
      type_hashcodes: HashMap<ty::t, @str>,
      type_short_names: HashMap<ty::t, ~str>,
      all_llvm_symbols: HashSet<@str>,
@@ -125,7 +125,7 @@ impl CrateContext {
                tcx: ty::ctxt,
                emap2: resolve::ExportMap2,
                maps: astencode::Maps,
-               symbol_hasher: Sha1,
+               symbol_hasher: Sha256,
                link_meta: LinkMeta,
                reachable: @mut HashSet<ast::NodeId>)
                -> CrateContext {

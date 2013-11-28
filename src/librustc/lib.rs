@@ -109,7 +109,7 @@ pub mod driver;
 pub mod util {
     pub mod common;
     pub mod ppaux;
-    pub mod sha1;
+    pub mod sha2;
 }
 
 pub mod lib {
