@@ -38,7 +38,7 @@ use extra::workcache;
 use rustc::driver::{driver, session};
 use rustc::metadata::filesearch;
 use rustc::metadata::filesearch::rust_path;
-use rustc::util::sha1;
+use rustc::util::sha2;
 use extra::{getopts};
 use syntax::{ast, diagnostic};
 use messages::{error, warn, note};
